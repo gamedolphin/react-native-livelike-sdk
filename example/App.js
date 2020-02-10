@@ -67,7 +67,7 @@ const App = () => {
       <View
         style={{
           height: widgetHeight,
-          width: 400,
+          width: '100%',
           backgroundColor: "black",
           overflow: "hidden"
         }}
