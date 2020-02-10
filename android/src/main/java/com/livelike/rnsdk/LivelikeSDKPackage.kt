@@ -1,5 +1,6 @@
 package com.livelike.rnsdk
 
+import android.app.Application
 import java.util.Arrays
 import java.util.Collections
 
@@ -10,9 +11,9 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ViewManager
 import java.util.Collections.emptyList
 
-class LivelikeSDKPackage : ReactPackage {
+class LivelikeSDKPackage (private val application: Application) : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-        return Arrays.asList<NativeModule>(LivelikeSDKModule(reactContext))
+        return Arrays.asList<NativeModule>(LivelikeSDKModule(application, reactContext))
     }
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
