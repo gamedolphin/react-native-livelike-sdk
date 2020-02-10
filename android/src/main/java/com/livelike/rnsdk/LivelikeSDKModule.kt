@@ -14,18 +14,20 @@ import com.livelike.engagementsdk.utils.registerLogsHandler
 
 class LivelikeSDKModule(private val application: Application, private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
-    lateinit var engagementSDK : EngagementSDK
+    companion object {
+        const val LIVE_LIKE_LOG: String = "Livelike"
+        lateinit var engagementSDK : EngagementSDK
+        fun isInitialized() = ::engagementSDK.isInitialized
+    }
 
-    val LIVE_LIKE_LOG: String = "Livelike"
 
     override fun getName(): String {
         return "LivelikeSdk"
     }
 
     @ReactMethod
-    fun sampleMethod(stringArgument: String, numberArgument: Int, callback: Callback) {
-        // TODO: Implement some actually useful functionality
-        callback.invoke("Received numberArgument: $numberArgument stringArgument: $stringArgument")
+    fun isReady() : Boolean {
+        return isInitialized() && engagementSDK != null
     }
 
     @ReactMethod

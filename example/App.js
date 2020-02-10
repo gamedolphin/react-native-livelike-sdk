@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState } from "react";
 import { Platform, StyleSheet, Text, View, AsyncStorage } from "react-native";
-import LivelikeSdk from "react-native-livelike-sdk";
+import LivelikeSdk, { LivelikeWidgetView } from "react-native-livelike-sdk";
 
 const clientId = "4etKALJXv2HhuEZG0I3uX8H8DITuD8poaJIRdXhq";
 const tokenKey = "userToken";
@@ -19,7 +19,6 @@ const App = () => {
         await AsyncStorage.setItem(tokenKey, token);
 
         setInitialized(true);
-        alert("INITIALIZED " + token);
       } catch (err) {
         alert(JSON.stringify(err));
       }
@@ -30,9 +29,16 @@ const App = () => {
 
   return (
     <View style={styles.container}>
+      <View style={{ height: 400, width: 400, backgroundColor: "black" }}>
+        <LivelikeWidgetView
+          programId="2b8b7ec1-5188-403e-ace0-1d117439537a"
+          style={{ flex: 1 }}
+        />
+      </View>
       <Text style={styles.welcome}>☆LivelikeSdk example☆</Text>
-      <Text style={styles.welcome}>☆NATIVE CALLBACK MESSAGE☆</Text>
-      <Text style={styles.instructions}>{JSON.stringify(initialized)}</Text>
+      <Text style={styles.instructions}>
+        Engagement SDK Ready : {JSON.stringify(initialized)}
+      </Text>
     </View>
   );
 };
@@ -55,5 +61,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#333333",
     marginBottom: 5
+  },
+
+  sdk: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#000000"
   }
 });

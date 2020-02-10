@@ -13,10 +13,10 @@ import java.util.Collections.emptyList
 
 class LivelikeSDKPackage (private val application: Application) : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-        return Arrays.asList<NativeModule>(LivelikeSDKModule(application, reactContext))
+        return listOf<NativeModule>(LivelikeSDKModule(application, reactContext))
     }
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-        return emptyList<ViewManager<*, *>>()
+        return listOf(LivelikeWidgetViewManager(reactContext))
     }
 }
