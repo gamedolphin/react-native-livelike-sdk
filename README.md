@@ -47,7 +47,7 @@ The example in the project lists out most of the wrapper api.
 ### Customization
 #### Android
 
-Override the `colors.xml` and `dimens.xml` to customize the look and feel of the android sdk. It would not be possible to provide a unified JS controlled wrapper api right now without significant changes to the native SDKs. 
+Override the `colors.xml` and `dimens.xml` to customize the look and feel of the android sdk. It would not be possible to provide a unified JS controlled wrapper api right now without significant changes to the native SDKs. Full documentation can be found https://docs.livelike.com/docs/android-customization
 
 ### iOS Support
 Not yet
