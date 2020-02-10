@@ -1,5 +1,12 @@
-import { NativeModules } from 'react-native';
+import { NativeModules } from "react-native";
 
 const { LivelikeSdk } = NativeModules;
 
-export default LivelikeSdk;
+const initializeSDK = (clientId, userAccessToken) =>
+  LivelikeSdk.initializeSDK(clientId, userAccessToken);
+
+const Wrapper = {
+  initializeSDK
+};
+
+export default Wrapper;

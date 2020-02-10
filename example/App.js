@@ -8,50 +8,45 @@
  * https://github.com/facebook/react-native
  */
 
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import LivelikeSdk from 'react-native-livelike-sdk';
+import React, { Component, useEffect } from "react";
+import { Platform, StyleSheet, Text, View } from "react-native";
+import LivelikeSdk from "react-native-livelike-sdk";
 
-export default class App extends Component<{}> {
-  state = {
-    status: 'starting',
-    message: '--'
-  };
-  componentDidMount() {
-    LivelikeSdk.sampleMethod('Testing', 123, (message) => {
-      this.setState({
-        status: 'native callback received',
-        message
-      });
-    });
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>☆LivelikeSdk example☆</Text>
-        <Text style={styles.instructions}>STATUS: {this.state.status}</Text>
-        <Text style={styles.welcome}>☆NATIVE CALLBACK MESSAGE☆</Text>
-        <Text style={styles.instructions}>{this.state.message}</Text>
-      </View>
-    );
-  }
-}
+const clientId = "4etKALJXv2HhuEZG0I3uX8H8DITuD8poaJIRdXhq";
+
+const App = () => {
+  useEffect(() => {
+    const init = async () => {
+      await LivelikeSdk.initializeSDK(clientId);
+    };
+    init();
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.welcome}>☆LivelikeSdk example☆</Text>
+      <Text style={styles.welcome}>☆NATIVE CALLBACK MESSAGE☆</Text>
+    </View>
+  );
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF"
   },
   welcome: {
     fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+    textAlign: "center",
+    margin: 10
   },
   instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    textAlign: "center",
+    color: "#333333",
+    marginBottom: 5
+  }
 });
