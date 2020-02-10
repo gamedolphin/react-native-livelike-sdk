@@ -4,17 +4,9 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:background="@color/catalyst_redbox_background">
-
-    <TextView
-        android:id="@+id/widgetText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FC Widget View"></TextView>
-
     <com.livelike.engagementsdk.widget.view.WidgetView
         android:id="@+id/widget_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000000"
-        android:layout_gravity="bottom|end" />
+        android:layout_height="wrap_content"
+        android:background="#000000" />
 </LinearLayout>

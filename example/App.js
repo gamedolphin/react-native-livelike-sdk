@@ -1,5 +1,13 @@
 import React, { Component, useEffect, useState } from "react";
-import { Platform, StyleSheet, Text, View, AsyncStorage } from "react-native";
+import {
+  LayoutAnimation,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  AsyncStorage,
+  UIManager
+} from "react-native";
 import LivelikeSdk, { LivelikeWidgetView } from "react-native-livelike-sdk";
 
 const clientId = "4etKALJXv2HhuEZG0I3uX8H8DITuD8poaJIRdXhq";
@@ -7,6 +15,15 @@ const tokenKey = "userToken";
 
 const App = () => {
   const [initialized, setInitialized] = useState(false);
+  const [widgetHeight, setWidgetHeight] = useState(0);
+
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const initialize = async () => {
@@ -27,27 +44,42 @@ const App = () => {
     initialize();
 
     const listener = ({ height, width }) => {
-      // alert(`${height} ${width}`);
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+      setWidgetHeight(height);
+    };
+    const hideListener = () => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+      setWidgetHeight(0);
     };
 
     const emitter = LivelikeSdk.getWidgetListener();
-
     emitter.addListener("WidgetShown", listener);
+    emitter.addListener("WidgetHidden", hideListener);
 
     return () => {
       emitter.removeListener("WidgetShown", listener);
+      emitter.removeListener("WidgetHidden", hideListener);
     };
   }, []);
 
   return (
     <View style={styles.container}>
-      <View style={{ height: 400, width: 400, backgroundColor: "black" }}>
-        {initialized ? (
-          <LivelikeWidgetView
-            programId="2b8b7ec1-5188-403e-ace0-1d117439537a"
-            style={{ flex: 1 }}
-          />
-        ) : null}
+      <View
+        style={{
+          height: widgetHeight,
+          width: 400,
+          backgroundColor: "black",
+          overflow: "hidden"
+        }}
+      >
+        <View style={{ height: 300, width: 400, position: "absolute" }}>
+          {initialized ? (
+            <LivelikeWidgetView
+              programId="2b8b7ec1-5188-403e-ace0-1d117439537a"
+              style={{ flex: 1 }}
+            />
+          ) : null}
+        </View>
       </View>
       <Text style={styles.welcome}>☆LivelikeSdk example☆</Text>
       <Text style={styles.instructions}>

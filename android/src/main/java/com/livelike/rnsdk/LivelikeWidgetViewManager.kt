@@ -40,6 +40,11 @@ class LivelikeWidgetViewManager (val applicationContext: ReactApplicationContext
                 params.putInt("width", width)
                 sendEvent(applicationContext, "WidgetShown", params)
             }
+
+            override fun onRemoveWidget() {
+                val params = Arguments.createMap()
+                sendEvent(applicationContext, "WidgetHidden", params)
+            }
         })
     }
 
