@@ -25,15 +25,29 @@ const App = () => {
     };
 
     initialize();
+
+    const listener = ({ height, width }) => {
+      // alert(`${height} ${width}`);
+    };
+
+    const emitter = LivelikeSdk.getWidgetListener();
+
+    emitter.addListener("WidgetShown", listener);
+
+    return () => {
+      emitter.removeListener("WidgetShown", listener);
+    };
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={{ height: 400, width: 400, backgroundColor: "black" }}>
-        <LivelikeWidgetView
-          programId="2b8b7ec1-5188-403e-ace0-1d117439537a"
-          style={{ flex: 1 }}
-        />
+        {initialized ? (
+          <LivelikeWidgetView
+            programId="2b8b7ec1-5188-403e-ace0-1d117439537a"
+            style={{ flex: 1 }}
+          />
+        ) : null}
       </View>
       <Text style={styles.welcome}>☆LivelikeSdk example☆</Text>
       <Text style={styles.instructions}>

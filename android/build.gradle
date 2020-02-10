@@ -88,7 +88,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.livelike.android-engagement-sdk:engagementsdk:1.5.3.1'
+    implementation 'com.livelike.android-engagement-sdk:engagementsdk:1.5.3.2'
 }
 
 def configureReactNativePom(def pom) {

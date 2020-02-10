@@ -8,6 +8,7 @@ import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ThemedReactContext
 import com.livelike.engagementsdk.LiveLikeContentSession
+import com.livelike.engagementsdk.WidgetListener
 import com.livelike.engagementsdk.widget.view.WidgetView
 
 class LivelikeWidgetView(context: ThemedReactContext, private val applicationContext: ReactApplicationContext) : LinearLayout(context), LifecycleEventListener {
@@ -43,10 +44,10 @@ class LivelikeWidgetView(context: ThemedReactContext, private val applicationCon
         contentSession.close()
     }
 
-    fun updateContentSession(contentSession: LiveLikeContentSession) {
+    fun updateContentSession(contentSession: LiveLikeContentSession, listener: WidgetListener ) {
         Log.v(LivelikeSDKModule.LIVE_LIKE_LOG, "updateContentSession")
         this.contentSession = contentSession
-        widgetView.setSession(contentSession)
+        widgetView.setSession(contentSession, listener)
     }
 
     private fun manuallyLayoutChildren() {
