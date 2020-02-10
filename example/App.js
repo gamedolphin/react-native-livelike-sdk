@@ -45,6 +45,7 @@ const App = () => {
 
     const listener = ({ height, width }) => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+      console.log("[Livelike] set height " + height);
       setWidgetHeight(height);
     };
     const hideListener = () => {
@@ -52,13 +53,19 @@ const App = () => {
       setWidgetHeight(0);
     };
 
+    const analyticsListener = ({ eventKey, eventJson }) => {
+      console.log(`[Livelike] ${eventKey} ${eventJson}`);
+    };
+
     const emitter = LivelikeSdk.getWidgetListener();
     emitter.addListener("WidgetShown", listener);
     emitter.addListener("WidgetHidden", hideListener);
+    emitter.addListener("AnalyticsEvent", analyticsListener);
 
     return () => {
       emitter.removeListener("WidgetShown", listener);
       emitter.removeListener("WidgetHidden", hideListener);
+      emitter.removeListener("AnalyticsEvent", analyticsListener);
     };
   }, []);
 
@@ -69,10 +76,15 @@ const App = () => {
           height: widgetHeight,
           width: '100%',
           backgroundColor: "black",
-          overflow: "hidden"
+          overflow: "hidden",
+          justifyContent: "flex-start",
+          flexDirection: "column",
+          alignItems: "stretch"
         }}
       >
-        <View style={{ height: 300, width: 400, position: "absolute" }}>
+        <View
+          style={{ minHeight: 200, width: "100%", backgroundColor: "green" }}
+        >
           {initialized ? (
             <LivelikeWidgetView
               programId="2b8b7ec1-5188-403e-ace0-1d117439537a"

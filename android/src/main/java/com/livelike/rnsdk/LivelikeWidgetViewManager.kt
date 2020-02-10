@@ -46,6 +46,14 @@ class LivelikeWidgetViewManager (val applicationContext: ReactApplicationContext
                 sendEvent(applicationContext, "WidgetHidden", params)
             }
         })
+        session.analyticService.setEventObserver { eventKey, eventJson ->
+            run {
+                val params = Arguments.createMap()
+                params.putString("eventKey", eventKey)
+                params.putString("eventJson", eventJson.toString())
+                sendEvent(applicationContext, "AnalyticsEvent", params)
+            }
+        }
     }
 
     override fun onDropViewInstance(view: LinearLayout) {
