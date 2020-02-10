@@ -37,7 +37,7 @@ emitter.addListener("AnalyticsEvent", analyticsListener);
 // Render the widget view after initialization
 
 <LivelikeWidgetView
-    programId="2b8b7ec1-5188-403e-ace0-1d117439537a"
+    programId={programId}
     style={{ flex: 1 }} />
 
 ```
