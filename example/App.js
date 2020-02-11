@@ -83,7 +83,7 @@ const App = () => {
         }}
       >
         <View
-          style={{ minHeight: 200, width: "100%", backgroundColor: "green" }}
+          style={{ minHeight: 126, width: "100%", backgroundColor: "green" }}
         >
           {initialized ? (
             <LivelikeWidgetView
