@@ -4,12 +4,15 @@ import android.util.Log
 import android.view.Choreographer
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ThemedReactContext
 import com.livelike.engagementsdk.LiveLikeContentSession
 import com.livelike.engagementsdk.WidgetListener
+import com.livelike.engagementsdk.services.messaging.proxies.WidgetInterceptor
 import com.livelike.engagementsdk.widget.view.WidgetView
+import com.livelike.rnsdk.util.ViewUtils
 
 class LivelikeWidgetView(context: ThemedReactContext, private val applicationContext: ReactApplicationContext) : LinearLayout(context), LifecycleEventListener {
 
@@ -23,7 +26,7 @@ class LivelikeWidgetView(context: ThemedReactContext, private val applicationCon
         this.fallback = Choreographer.FrameCallback {
             manuallyLayoutChildren()
             viewTreeObserver.dispatchOnGlobalLayout();
-            Choreographer.getInstance().postFrameCallback(this!!.fallback)
+            // Choreographer.getInstance().postFrameCallback(this!!.fallback)
         }
         Choreographer.getInstance().postFrameCallback(fallback)
         val parentView = LayoutInflater.from(context).inflate(R.layout.widget_view, null) as LinearLayout;
@@ -47,12 +50,19 @@ class LivelikeWidgetView(context: ThemedReactContext, private val applicationCon
     fun updateContentSession(contentSession: LiveLikeContentSession, listener: WidgetListener ) {
         Log.v(LivelikeSDKModule.LIVE_LIKE_LOG, "updateContentSession")
         this.contentSession = contentSession
+        contentSession.widgetInterceptor = object : WidgetInterceptor() {
+            override fun widgetWantsToShow() {
+                showWidget()
+                Choreographer.getInstance().postFrameCallback(fallback)
+            }
+
+        }
         widgetView.setSession(contentSession, listener)
     }
 
     private fun manuallyLayoutChildren() {
         for (i in 0 until childCount) {
-            var child = getChildAt(i)
+            val child = getChildAt(i)
             child.measure(MeasureSpec.makeMeasureSpec(measuredWidth, MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(measuredHeight, MeasureSpec.EXACTLY))
             child.layout(0, 0, child.measuredWidth, child.measuredHeight)
