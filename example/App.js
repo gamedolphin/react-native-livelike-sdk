@@ -74,7 +74,7 @@ const App = () => {
       <View
         style={{
           height: widgetHeight,
-          width: '100%',
+          width: "100%",
           backgroundColor: "black",
           overflow: "hidden",
           justifyContent: "flex-start",
@@ -83,7 +83,7 @@ const App = () => {
         }}
       >
         <View
-          style={{ minHeight: 126, width: "100%", backgroundColor: "green" }}
+          style={{ minHeight: 1000, width: "100%", backgroundColor: "green" }}
         >
           {initialized ? (
             <LivelikeWidgetView
