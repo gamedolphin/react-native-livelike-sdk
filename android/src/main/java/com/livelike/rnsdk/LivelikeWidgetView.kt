@@ -55,6 +55,7 @@ class LivelikeWidgetView(context: ThemedReactContext, private val applicationCon
             var child = getChildAt(i)
             child.measure(MeasureSpec.makeMeasureSpec(measuredWidth, MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(measuredHeight, MeasureSpec.EXACTLY))
-            child.layout(0, 0, child.measuredWidth, child.measuredHeight)        }
+            child.layout(0, 0, child.measuredWidth, child.measuredHeight)
+        }
     }
 }

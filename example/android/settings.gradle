@@ -1,4 +1,6 @@
 rootProject.name = 'example'
+include ':@react-native-community_async-storage'
+project(':@react-native-community_async-storage').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/async-storage/android')
 include ':react-native-livelike-sdk'
 project(':react-native-livelike-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-livelike-sdk/android')
 
