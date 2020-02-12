@@ -12,12 +12,17 @@ import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.livelike.engagementsdk.WidgetListener
 import com.livelike.rnsdk.util.ViewUtils
-
+import com.facebook.react.uimanager.events.RCTEventEmitter
+import com.facebook.react.common.MapBuilder
 
 class LivelikeWidgetViewManager(val applicationContext: ReactApplicationContext) : ViewGroupManager<LinearLayout>() {
 
     companion object {
         const val REACT_CLASS = "LivelikeWidgetView"
+        const val WIDGET_SHOWN_EVENT = "onWidgetShown"
+        const val WIDGET_HIDDEN_EVENT = "onWidgetHidden"
+        const val ANALYTICS_EVENT = "onAnalytics"
+        const val REG_TYPE = "registrationName"
     }
 
     override fun getName(): String {
@@ -33,42 +38,19 @@ class LivelikeWidgetViewManager(val applicationContext: ReactApplicationContext)
     fun setProgramId(view: LivelikeWidgetView, programId: String) {
         Log.v(LivelikeSDKModule.LIVE_LIKE_LOG, "setProgramId $programId")
         val session = LivelikeSDKModule.engagementSDK.createContentSession(programId)
-        view.updateContentSession(session, object : WidgetListener {
-            override fun onNewWidget(height: Int, width: Int) {
-                Log.v(LivelikeSDKModule.LIVE_LIKE_LOG, "widget shown $height")
-                Log.v(LivelikeSDKModule.LIVE_LIKE_LOG, "widget shown " + ViewUtils.pxToDp(applicationContext, height))
+        view.updateContentSession(session)
+    }
 
-                val params = Arguments.createMap()
-                params.putInt("height", ViewUtils.pxToDp(applicationContext, height))
-                params.putInt("width", ViewUtils.pxToDp(applicationContext, width))
-                sendEvent(applicationContext, "WidgetShown", params)
-            }
-
-            override fun onRemoveWidget() {
-                val params = Arguments.createMap()
-                sendEvent(applicationContext, "WidgetHidden", params)
-            }
-        })
-        session.analyticService.setEventObserver { eventKey, eventJson ->
-            run {
-                val params = Arguments.createMap()
-                params.putString("eventKey", eventKey)
-                params.putString("eventJson", eventJson.toString())
-                sendEvent(applicationContext, "AnalyticsEvent", params)
-            }
-        }
+    override fun getExportedCustomDirectEventTypeConstants() : Map<String,Any> {
+        return MapBuilder.builder<String, Any>()
+                .put(WIDGET_SHOWN_EVENT, MapBuilder.of(REG_TYPE, WIDGET_SHOWN_EVENT))
+                .put(WIDGET_HIDDEN_EVENT, MapBuilder.of(REG_TYPE, WIDGET_HIDDEN_EVENT))
+                .put(ANALYTICS_EVENT, MapBuilder.of(REG_TYPE, ANALYTICS_EVENT))
+                .build()
     }
 
     override fun onDropViewInstance(view: LinearLayout) {
         super.onDropViewInstance(view)
         Log.v(LivelikeSDKModule.LIVE_LIKE_LOG, "onDropViewInstance")
-    }
-
-    private fun sendEvent(reactContext: ReactContext,
-                          eventName: String,
-                          params: WritableMap?) {
-        reactContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit(eventName, params)
     }
 }

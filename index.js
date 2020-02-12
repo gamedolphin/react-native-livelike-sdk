@@ -5,11 +5,8 @@ import LivelikeWidgetView from "./LivelikeWidgetView.js";
 const initializeSDK = (clientId, userAccessToken) =>
   LivelikeSdk.initializeSDK(clientId, userAccessToken);
 
-const eventEmitter = () => new NativeEventEmitter(LivelikeSdk);
-
 const Wrapper = {
-  initializeSDK,
-  getWidgetListener: eventEmitter
+  initializeSDK
 };
 
 export default Wrapper;

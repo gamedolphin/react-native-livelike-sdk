@@ -5,9 +5,9 @@ import {
   StyleSheet,
   Text,
   View,
-  AsyncStorage,
   UIManager
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import LivelikeSdk, { LivelikeWidgetView } from "react-native-livelike-sdk";
 
 const clientId = "4etKALJXv2HhuEZG0I3uX8H8DITuD8poaJIRdXhq";
@@ -42,61 +42,34 @@ const App = () => {
     };
 
     initialize();
-
-    const listener = ({ height, width }) => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-      console.log("[Livelike] set height " + height);
-      setWidgetHeight(height);
-    };
-    const hideListener = () => {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-      setWidgetHeight(0);
-    };
-
-    const analyticsListener = ({ eventKey, eventJson }) => {
-      console.log(`[Livelike] ${eventKey} ${eventJson}`);
-    };
-
-    const emitter = LivelikeSdk.getWidgetListener();
-    emitter.addListener("WidgetShown", listener);
-    emitter.addListener("WidgetHidden", hideListener);
-    emitter.addListener("AnalyticsEvent", analyticsListener);
-
-    return () => {
-      emitter.removeListener("WidgetShown", listener);
-      emitter.removeListener("WidgetHidden", hideListener);
-      emitter.removeListener("AnalyticsEvent", analyticsListener);
-    };
   }, []);
+
+  const analyticsListener = ({ eventKey, eventJson }) => {
+    console.log(`[Livelike] ${eventKey} ${eventJson}`);
+  };
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          height: widgetHeight,
-          width: "100%",
-          backgroundColor: "black",
-          overflow: "hidden",
-          justifyContent: "flex-start",
-          flexDirection: "column",
-          alignItems: "stretch"
-        }}
-      >
-        <View
-          style={{ minHeight: 1000, width: "100%", backgroundColor: "green" }}
-        >
-          {initialized ? (
-            <LivelikeWidgetView
-              programId="2b8b7ec1-5188-403e-ace0-1d117439537a"
-              style={{ flex: 1 }}
-            />
-          ) : null}
-        </View>
-      </View>
+      {initialized ? (
+        <LivelikeWidgetView
+          programId="2b8b7ec1-5188-403e-ace0-1d117439537a"
+          style={{ flex: 1 }}
+          onAnalytics={analyticsListener}
+          animationPreset={LayoutAnimation.Presets.linear}
+        />
+      ) : null}
       <Text style={styles.welcome}>☆LivelikeSdk example☆</Text>
       <Text style={styles.instructions}>
         Engagement SDK Ready : {JSON.stringify(initialized)}
       </Text>
+      {initialized ? (
+        <LivelikeWidgetView
+          programId="d96c979e-90e4-4f9f-8800-0816572b99a0"
+          style={{ flex: 1 }}
+          onAnalytics={analyticsListener}
+          animationPreset={LayoutAnimation.Presets.linear}
+        />
+      ) : null}
     </View>
   );
 };
