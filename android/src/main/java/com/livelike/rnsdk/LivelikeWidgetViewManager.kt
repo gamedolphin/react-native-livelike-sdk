@@ -2,18 +2,11 @@ package com.livelike.rnsdk
 
 import android.util.Log
 import android.widget.LinearLayout
-import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContext
-import com.facebook.react.bridge.WritableMap
-import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.livelike.engagementsdk.WidgetListener
-import com.livelike.rnsdk.util.ViewUtils
-import com.facebook.react.uimanager.events.RCTEventEmitter
-import com.facebook.react.common.MapBuilder
+
 
 class LivelikeWidgetViewManager(val applicationContext: ReactApplicationContext) : ViewGroupManager<LinearLayout>() {
 
@@ -42,11 +35,23 @@ class LivelikeWidgetViewManager(val applicationContext: ReactApplicationContext)
     }
 
     override fun getExportedCustomDirectEventTypeConstants() : Map<String,Any> {
-        return MapBuilder.builder<String, Any>()
-                .put(WIDGET_SHOWN_EVENT, MapBuilder.of(REG_TYPE, WIDGET_SHOWN_EVENT))
-                .put(WIDGET_HIDDEN_EVENT, MapBuilder.of(REG_TYPE, WIDGET_HIDDEN_EVENT))
-                .put(ANALYTICS_EVENT, MapBuilder.of(REG_TYPE, ANALYTICS_EVENT))
-                .build()
+
+        return mapOf(
+                WIDGET_SHOWN_EVENT  to mapOf(REG_TYPE to WIDGET_SHOWN_EVENT),
+                WIDGET_HIDDEN_EVENT to mapOf(REG_TYPE to WIDGET_HIDDEN_EVENT),
+                ANALYTICS_EVENT to mapOf(REG_TYPE to ANALYTICS_EVENT)
+        )
+
+//        val original = super.getExportedCustomDirectEventTypeConstants()
+//
+//        return if (original != null) {
+//            (map.asSequence() + original.asSequence())
+//                    .distinct<Map.Entry<String, Any>>()
+//                    .groupBy({ it.key }, { it.value })
+//        }
+//        else {
+//            map
+//        }
     }
 
     override fun onDropViewInstance(view: LinearLayout) {

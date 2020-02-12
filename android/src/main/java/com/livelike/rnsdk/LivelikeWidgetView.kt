@@ -20,13 +20,16 @@ class LivelikeWidgetView(context: ThemedReactContext, private val applicationCon
 
     private var widgetView: WidgetView
     private var fallback: Choreographer.FrameCallback
+    private var renderWidget = false
 
     init {
         this.applicationContext.addLifecycleEventListener(this)
         this.fallback = Choreographer.FrameCallback {
             manuallyLayoutChildren()
-            viewTreeObserver.dispatchOnGlobalLayout();
-            // Choreographer.getInstance().postFrameCallback(this!!.fallback)
+            viewTreeObserver.dispatchOnGlobalLayout()
+            if(renderWidget) {
+                Choreographer.getInstance().postFrameCallback(this!!.fallback)
+            }
         }
         Choreographer.getInstance().postFrameCallback(fallback)
         val parentView = LayoutInflater.from(context).inflate(R.layout.widget_view, null) as LinearLayout;
@@ -54,6 +57,7 @@ class LivelikeWidgetView(context: ThemedReactContext, private val applicationCon
         contentSession.widgetInterceptor = object : WidgetInterceptor() {
             override fun widgetWantsToShow() {
                 showWidget()
+                renderWidget = true
                 Choreographer.getInstance().postFrameCallback(fallback)
             }
 
@@ -71,6 +75,7 @@ class LivelikeWidgetView(context: ThemedReactContext, private val applicationCon
             }
 
             override fun onRemoveWidget() {
+                renderWidget = false
                 val params = Arguments.createMap()
                 sendEvent(LivelikeWidgetViewManager.WIDGET_HIDDEN_EVENT, params)
             }
